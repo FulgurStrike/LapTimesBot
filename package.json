@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@npmcli/fs": "^3.1.0",
+    "discord.js": "^14.14.1",
+    "pagination.js": "^0.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "main": "Times.js"
+}
