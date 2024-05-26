@@ -112,7 +112,7 @@ client.on('messageCreate', async function(message){
     if (command == "!edit") {
         const userId = message.author.id;
 	    const inputData = args.join(' ');
-        const [ID, time] = inputData.split('|').map(item => item.trim());
+        const [ID, time] = inputData.split(' ').map(item => item.trim());
 
         if(!inputData) {
             message.channel.send(`${message.author} Provide an ID to edit`);
