@@ -119,7 +119,7 @@ client.on('messageCreate', async function(message){
             return;
         }
 
-        db.run('UPDATE racing_data SET lap_time = ? WHERE id = ?', [time, ID], (err) => {
+        db.run('UPDATE racing_data SET lap_time = ? WHERE id = ? and user_id = ?', [time, ID, userId], (err) => {
             if(err) {
                 console.error('Error editing data data:', err)
                 return;
