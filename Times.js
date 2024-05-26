@@ -108,6 +108,26 @@ client.on('messageCreate', async function(message){
 	});
 	
     }
+
+    if (command == "!edit") {
+        const userId = message.author.id;
+	    const inputData = args.join(' ');
+        const [ID, time] = inputData.split('|').map(item => item.trim());
+
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an ID to edit`);
+            return;
+        }
+
+        db.run('UPDATE racing_data SET lap_time = ? WHERE id = ?', [time, ID], (err) => {
+            if(err) {
+                console.error('Error editing data data:', err)
+                return;
+            }
+
+            message.channel.send(`${message.author} Successfully updated lap time.`)
+        });
+    }
   
 
     if (command === '!delete') {
