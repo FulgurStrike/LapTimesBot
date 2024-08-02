@@ -9,7 +9,7 @@ const { Pagination } =  require('pagination.js');
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     const logChannel = client.channels.cache.get('1210926663978983484');
-    logChannel.send("I am online motherfuckers :)");
+    logChannel.send("Gentlemen Start Your Engines!");
 });
 
 client.on('messageCreate', async function(message){
