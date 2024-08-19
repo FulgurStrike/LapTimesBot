@@ -13,8 +13,8 @@ A simple bot created to allow users to store laptimes in a SQL Database
 
 `!edittrack <ID> <TRACK>` -> Allows the user to edit a specific track.
 
-`!edittime <ID> <CAR>` -> Allows the user to edit a specific car.
+`!editcar <ID> <CAR>` -> Allows the user to edit a specific car.
 
 `!edittime <ID> <TIME>` -> Allows the user to edit a specific time.
 
-`!edittime <ID> <CATEGORY>` -> Allows the user to edit a specific category.
+`!editcategory <ID> <CATEGORY>` -> Allows the user to edit a specific category.
