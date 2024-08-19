@@ -110,7 +110,7 @@ client.on('messageCreate', async function(message){
 	
     }
 
-    if (command == "!edit") {
+    if (command == "!edittime") {
         const userId = message.author.id;
 	    const inputData = args.join(' ');
         const [ID, time] = inputData.split(' ').map(item => item.trim());
@@ -127,6 +127,66 @@ client.on('messageCreate', async function(message){
             }
 
             message.channel.send(`${message.author} Successfully updated lap time.`)
+        });
+    }
+
+    if (command == "!editcar") {
+        const userId = message.author.id;
+	    const inputData = args.join(' ');
+        const [ID, car] = inputData.split(' ').map(item => item.trim());
+
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an ID to edit`);
+            return;
+        }
+
+        db.run('UPDATE racing_data SET car = ? WHERE id = ? and user_id = ?', [car, ID, userId], (err) => {
+            if(err) {
+                console.error('Error editing data data:', err)
+                return;
+            }
+
+            message.channel.send(`${message.author} Successfully updated car name.`)
+        });
+    }
+
+    if (command == "!edittrack") {
+        const userId = message.author.id;
+	    const inputData = args.join(' ');
+        const [ID, track] = inputData.split(' ').map(item => item.trim());
+
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an ID to edit`);
+            return;
+        }
+
+        db.run('UPDATE racing_data SET track = ? WHERE id = ? and user_id = ?', [track, ID, userId], (err) => {
+            if(err) {
+                console.error('Error editing data data:', err)
+                return;
+            }
+
+            message.channel.send(`${message.author} Successfully updated track name.`)
+        });
+    }
+
+    if (command == "!editcategory") {
+        const userId = message.author.id;
+	    const inputData = args.join(' ');
+        const [ID, category] = inputData.split(' ').map(item => item.trim());
+
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an ID to edit`);
+            return;
+        }
+
+        db.run('UPDATE racing_data SET category = ? WHERE id = ? and user_id = ?', [category, ID, userId], (err) => {
+            if(err) {
+                console.error('Error editing data data:', err)
+                return;
+            }
+
+            message.channel.send(`${message.author} Successfully updated category.`)
         });
     }
   
