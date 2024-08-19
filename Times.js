@@ -21,15 +21,15 @@ client.on('messageCreate', async function(message){
 
     if(command === '!store') {
         const inputData = args.join(' ');
-        const [car, track, lapTime] = inputData.split('|').map(item => item.trim());
+        const [car, track, lapTime, category] = inputData.split('|').map(item => item.trim());
 
-        if(!car || !track || !lapTime) {
-            message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME`);
+        if(!car || !track || !lapTime || !category) {
+            message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | Category`);
             return;
         }
         
         const userId = message.author.id;
-        db.run('INSERT INTO racing_data (user_id, track, car, lap_time) VALUES (?, ?, ?, ?)', [userId, car, track, lapTime], (err) => {
+        db.run('INSERT INTO racing_data (user_id, track, car, lap_time, Category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
             if(err) {
                 console.error('Error storing data:', err)
                 return;
@@ -58,7 +58,8 @@ client.on('messageCreate', async function(message){
 			          { name: `Id:`, value: `${row.id}` },
 		    	          { name: `Track:`, value: `${row.track}` },
 		                  { name: `Car:`, value: `${row.car}` },
-		    	          { name: `Lap Time:`, value: `${row.lap_time}` });
+		    	          { name: `Lap Time:`, value: `${row.lap_time}` },
+				  { name: `Category`, value: `${row.category}` })
 	    });
 
 	    
@@ -90,7 +91,7 @@ client.on('messageCreate', async function(message){
             return;
         }
 	
-	db.all('SELECT id, car, track, lap_time FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+	db.all('SELECT id, car, track, lap_time, Category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
 		if(err) {
 			console.error('Error fetching data');
                 	return;
@@ -101,7 +102,7 @@ client.on('messageCreate', async function(message){
 			return;
 		}
 
-		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time}`).join('\n');
+		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.Category}`).join('\n');
 
 		message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
 
@@ -167,7 +168,7 @@ client.on('messageCreate', async function(message){
 });
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, Category VARCHAR(200))');
 });
 client.login(token);
 
