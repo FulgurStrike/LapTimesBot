@@ -228,7 +228,7 @@ client.on('messageCreate', async function(message){
 });
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, Category VARCHAR(200))');
+    db.run('CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, Category VARCHAR(200)) DEFAULT "Default"');
 });
 client.login(token);
 
