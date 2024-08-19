@@ -24,7 +24,7 @@ client.on('messageCreate', async function(message){
         const [car, track, lapTime, category] = inputData.split('|').map(item => item.trim());
 
         if(!car || !track || !lapTime || !category) {
-            message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | Category`);
+            message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | CATEGORY`);
             return;
         }
         
@@ -59,7 +59,7 @@ client.on('messageCreate', async function(message){
 		    	          { name: `Track:`, value: `${row.track}` },
 		                  { name: `Car:`, value: `${row.car}` },
 		    	          { name: `Lap Time:`, value: `${row.lap_time}` },
-				  { name: `Category`, value: `${row.category}` })
+				  { name: `Category:`, value: `${row.category}` })
 	    });
 
 	    
@@ -228,7 +228,7 @@ client.on('messageCreate', async function(message){
 });
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, Category VARCHAR(200)) DEFAULT "Default"');
+    db.run("CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, \"category\" text DEFAULT 'Default')")
 });
 client.login(token);
 
