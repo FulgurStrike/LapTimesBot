@@ -29,7 +29,7 @@ client.on('messageCreate', async function(message){
         }
         
         const userId = message.author.id;
-        db.run('INSERT INTO racing_data (user_id, track, car, lap_time, Category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
+        db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
             if(err) {
                 console.error('Error storing data:', err)
                 return;
@@ -91,7 +91,7 @@ client.on('messageCreate', async function(message){
             return;
         }
 	
-	db.all('SELECT id, car, track, lap_time, Category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+	db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
 		if(err) {
 			console.error('Error fetching data');
                 	return;
@@ -102,7 +102,7 @@ client.on('messageCreate', async function(message){
 			return;
 		}
 
-		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.Category}`).join('\n');
+		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | category: ${row.Category}`).join('\n');
 
 		message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
 
