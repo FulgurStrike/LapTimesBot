@@ -102,7 +102,7 @@ client.on('messageCreate', async function(message){
 			return;
 		}
 
-		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | category: ${row.Category}`).join('\n');
+		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
 
 		message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
 
