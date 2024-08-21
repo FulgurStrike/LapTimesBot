@@ -29,21 +29,14 @@ client.on('messageCreate', async function(message){
         }
 
         const userId = message.author.id;
-        if(!lapTime === "") {
-            db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
-                if(err) {
-                    console.error('Error storing data:', err)
-                    return;
-                }
-            });
-        }else {
-            db.run('INSERT INTO racing_data (user_id, track, car, lap_time) VALUES (?, ?, ?, ?)', [userId, car, track, lapTime], (err) => {
-                if(err) {
-                    console.error('Error storing data:', err)
-                    return;
-                }
-            });
-        }
+        
+        db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category || "Default"], (err) => {
+            if(err) {
+                console.error('Error storing data:', err)
+                return;
+            }
+        });
+    }
         
         
         
