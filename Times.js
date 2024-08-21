@@ -83,32 +83,79 @@ client.on('messageCreate', async function(message){
         });
     }
 	
-    if (command === '!search') {
-	const userId = message.author.id;
-	const inputData = args.join(' ');
-	
-	if(!inputData) {
+    if (command === '!searchcar') {
+        const userId = message.author.id;
+        const inputData = args.join(' ');
+        
+        if(!inputData) {
             message.channel.send(`${message.author} Provide an car to search for`);
             return;
         }
-	
-	db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
-		if(err) {
-			console.error('Error fetching data');
-                	return;
-		}
-		
-		if(rows.length === 0) {
-			message.channel.send(`No times found for ${inputData}`)
-			return;
-		}
+        
+        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+            if(err) {
+                console.error('Error fetching data');
+                return;
+            }
+            
+            if(rows.length === 0) {
+                message.channel.send(`No times found for ${inputData}`)
+                return;
+            }
+            
+            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+        });
+    }
 
-		const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+    if (command === '!searchcategory') {
+        const userId = message.author.id;
+        const inputData = args.join(' ');
+        
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an car to search for`);
+            return;
+        }
+        
+        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE category LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+            if(err) {
+                console.error('Error fetching data');
+                return;
+            }
+            
+            if(rows.length === 0) {
+                message.channel.send(`No times found for ${inputData}`)
+                return;
+            }
+            
+            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+        });
+    }
 
-		message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
-
-	});
-	
+    if (command === '!searchtrack') {
+        const userId = message.author.id;
+        const inputData = args.join(' ');
+        
+        if(!inputData) {
+            message.channel.send(`${message.author} Provide an car to search for`);
+            return;
+        }
+        
+        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE track LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+            if(err) {
+                console.error('Error fetching data');
+                return;
+            }
+            
+            if(rows.length === 0) {
+                message.channel.send(`No times found for ${inputData}`)
+                return;
+            }
+            
+            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+        });
     }
 
     if (command == "!edittime") {
