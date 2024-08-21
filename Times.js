@@ -88,7 +88,7 @@ client.on('messageCreate', async function(message){
         const inputData = args.join(' ');
         
         if(!inputData) {
-            message.channel.send(`${message.author} Provide an car to search for`);
+            message.channel.send(`${message.author} Provide a car to search for`);
             return;
         }
         
@@ -113,7 +113,7 @@ client.on('messageCreate', async function(message){
         const inputData = args.join(' ');
         
         if(!inputData) {
-            message.channel.send(`${message.author} Provide an car to search for`);
+            message.channel.send(`${message.author} Provide a category to search for`);
             return;
         }
         
@@ -138,7 +138,7 @@ client.on('messageCreate', async function(message){
         const inputData = args.join(' ');
         
         if(!inputData) {
-            message.channel.send(`${message.author} Provide an car to search for`);
+            message.channel.send(`${message.author} Provide a track to search for`);
             return;
         }
         
