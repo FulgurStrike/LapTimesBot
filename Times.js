@@ -23,7 +23,7 @@ client.on('messageCreate', async function(message){
         const inputData = args.join(' ');
         const [car, track, lapTime, category] = inputData.split('|').map(item => item.trim());
 
-        if(!car || !track || !lapTime || !category) {
+        if(!car || !track || !lapTime) {
             message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | CATEGORY`);
             return;
         }
