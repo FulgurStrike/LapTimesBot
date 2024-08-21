@@ -15,19 +15,19 @@ client.on('ready', () => {
 client.on('messageCreate', async function(message){
     
     if (message.author.bot) return;
-
+    
     const args = message.content.trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
     if(command === '!store') {
         const inputData = args.join(' ');
         const [car, track, lapTime, category] = inputData.split('|').map(item => item.trim());
-
+        
         if(!car || !track || !lapTime) {
             message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | CATEGORY`);
             return;
         }
-
+        
         const userId = message.author.id;
         
         db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category || "Default"], (err) => {
@@ -36,10 +36,6 @@ client.on('messageCreate', async function(message){
                 return;
             }
         });
-    }
-        
-        
-        
         
         message.channel.send(`${message.author} Lap time stored successfully! :)`);
     }
