@@ -27,14 +27,26 @@ client.on('messageCreate', async function(message){
             message.channel.send(`${message.author} Invalid input format! Please use the format: TRACK | CAR | LAP_TIME | CATEGORY`);
             return;
         }
-        
+
         const userId = message.author.id;
-        db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
-            if(err) {
-                console.error('Error storing data:', err)
-                return;
-            }
-        });
+        if(!lapTime === "") {
+            db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category], (err) => {
+                if(err) {
+                    console.error('Error storing data:', err)
+                    return;
+                }
+            });
+        }else {
+            db.run('INSERT INTO racing_data (user_id, track, car, lap_time) VALUES (?, ?, ?, ?)', [userId, car, track, lapTime], (err) => {
+                if(err) {
+                    console.error('Error storing data:', err)
+                    return;
+                }
+            });
+        }
+        
+        
+        
         
         message.channel.send(`${message.author} Lap time stored successfully! :)`);
     }
