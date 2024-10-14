@@ -54,7 +54,7 @@ client.on('messageCreate', async function(message){
 	    let currentPage = 0;
 
 	    const embeds = rows.map(row => {
-		return new EmbedBuilder()
+        return new EmbedBuilder()
 		    	.addFields({ name: `Lap Times for:`, value: `${message.author}` },
 			          { name: `Id:`, value: `${row.id}` },
 		    	          { name: `Track:`, value: `${row.track}` },
@@ -68,231 +68,231 @@ client.on('messageCreate', async function(message){
 	    
 	    const collector = messageInstance.createMessageComponentCollector({ componentType: ComponentType.Button });
 	    collector.on('collect', async interaction => {    
-		if(interaction.customId === 'prev' && currentPage > 0) {
-			currentPage = currentPage - 1;
+        if(interaction.customId === 'prev' && currentPage > 0) {
+          currentPage = currentPage - 1;
 
-		}else if(interaction.customId === 'next' && currentPage < pageCount - 1) {
-			currentPage = currentPage + 1;
-		}
-		await interaction.update({ embeds: [embeds[currentPage]], components: [createButtons(currentPage, pageCount)] });    
-	    });
-	    collector.on('end', () => {
-		messageInstance.edit({ components: [] });
-	    });	
+        }else if(interaction.customId === 'next' && currentPage < pageCount - 1) {
+          currentPage = currentPage + 1;
+        }
+        await interaction.update({ embeds: [embeds[currentPage]], components: [createButtons(currentPage, pageCount)] });    
+      });
+          collector.on('end', () => {
+            messageInstance.edit({ components: [] });
+          });	
 		    
         });
     }
 	
-    if (command === '!searchcar') {
-        const userId = message.author.id;
-        const inputData = args.join(' ');
+  if (command === '!searchcar') {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
         
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide a car to search for`);
-            return;
-        }
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide a car to search for`);
+      return;
+    }
         
-        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
-            if(err) {
-                console.error('Error fetching data');
-                return;
-            }
+    db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      if(err) {
+        console.error('Error fetching data');
+        return;
+      }
             
-            if(rows.length === 0) {
-                message.channel.send(`No times found for ${inputData}`)
-                return;
-            }
+      if(rows.length === 0) {
+        message.channel.send(`No times found for ${inputData}`)
+        return;
+      }
             
-            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
-            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
-        });
-    }
+      const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+      message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+    });
+  }
 
-    if (command === '!searchcategory') {
-        const userId = message.author.id;
-        const inputData = args.join(' ');
+  if (command === '!searchcategory') {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
         
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide a category to search for`);
-            return;
-        }
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide a category to search for`);
+      return;
+    }
         
-        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE category LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
-            if(err) {
-                console.error('Error fetching data');
-                return;
-            }
-            
-            if(rows.length === 0) {
-                message.channel.send(`No times found for ${inputData}`)
-                return;
-            }
-            
-            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
-            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
-        });
-    }
+    db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE category LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      if(err) {
+        console.error('Error fetching data');
+        return;
+      }
 
-    if (command === '!searchtrack') {
-        const userId = message.author.id;
-        const inputData = args.join(' ');
+      if(rows.length === 0) {
+        message.channel.send(`No times found for ${inputData}`)
+        return;
+      }
+            
+      const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+      message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+    });
+  }
+
+  if (command === '!searchtrack') {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
         
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide a track to search for`);
-            return;
-        }
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide a track to search for`);
+      return;
+    }
         
-        db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE track LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
-            if(err) {
-                console.error('Error fetching data');
-                return;
-            }
+    db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE track LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      if(err) {
+        console.error('Error fetching data');
+        return;
+      }
             
-            if(rows.length === 0) {
-                message.channel.send(`No times found for ${inputData}`)
-                return;
-            }
+      if(rows.length === 0) {
+        message.channel.send(`No times found for ${inputData}`)
+        return;
+      }
             
-            const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
-            message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
-        });
+      const lapTimes = rows.map(row => `ID: ${row.id} | Car: ${row.car} | Track: ${row.track} | Time: ${row.lap_time} | Category: ${row.category}`).join('\n');
+      message.channel.send(`${message.author}\nLap Times for:\n${lapTimes}`)
+    });
+  }
+
+  if (command == "!edittime") {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
+    const [ID, time] = inputData.split(' ').map(item => item.trim());
+
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide an ID to edit`);
+      return;
     }
 
-    if (command == "!edittime") {
-        const userId = message.author.id;
-	    const inputData = args.join(' ');
-        const [ID, time] = inputData.split(' ').map(item => item.trim());
+    db.run('UPDATE racing_data SET lap_time = ? WHERE id = ? and user_id = ?', [time, ID, userId], (err) => {
+      if(err) {
+        console.error('Error editing data data:', err)
+        return;
+      }
 
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide an ID to edit`);
-            return;
-        }
+      message.channel.send(`${message.author} Successfully updated lap time.`)
+    });
+  }
 
-        db.run('UPDATE racing_data SET lap_time = ? WHERE id = ? and user_id = ?', [time, ID, userId], (err) => {
-            if(err) {
-                console.error('Error editing data data:', err)
-                return;
-            }
+  if (command == "!editcar") {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
+    const [ID, car] = inputData.split(' ').map(item => item.trim());
 
-            message.channel.send(`${message.author} Successfully updated lap time.`)
-        });
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide an ID to edit`);
+      return;
     }
 
-    if (command == "!editcar") {
-        const userId = message.author.id;
-	    const inputData = args.join(' ');
-        const [ID, car] = inputData.split(' ').map(item => item.trim());
+    db.run('UPDATE racing_data SET car = ? WHERE id = ? and user_id = ?', [car, ID, userId], (err) => {
+      if(err) {
+        console.error('Error editing data data:', err)
+        return;
+      }
 
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide an ID to edit`);
-            return;
-        }
+      message.channel.send(`${message.author} Successfully updated car name.`)
+    });
+  }
 
-        db.run('UPDATE racing_data SET car = ? WHERE id = ? and user_id = ?', [car, ID, userId], (err) => {
-            if(err) {
-                console.error('Error editing data data:', err)
-                return;
-            }
+  if (command == "!edittrack") {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
+    const [ID, track] = inputData.split(' ').map(item => item.trim());
 
-            message.channel.send(`${message.author} Successfully updated car name.`)
-        });
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide an ID to edit`);
+      return;
     }
 
-    if (command == "!edittrack") {
-        const userId = message.author.id;
-	    const inputData = args.join(' ');
-        const [ID, track] = inputData.split(' ').map(item => item.trim());
+    db.run('UPDATE racing_data SET track = ? WHERE id = ? and user_id = ?', [track, ID, userId], (err) => {
+      if(err) {
+        console.error('Error editing data data:', err)
+        return;
+      }
 
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide an ID to edit`);
-            return;
-        }
+      message.channel.send(`${message.author} Successfully updated track name.`)
+    });
+  }
 
-        db.run('UPDATE racing_data SET track = ? WHERE id = ? and user_id = ?', [track, ID, userId], (err) => {
-            if(err) {
-                console.error('Error editing data data:', err)
-                return;
-            }
+  if (command == "!editcategory") {
+    const userId = message.author.id;
+    const inputData = args.join(' ');
+    const [ID, category] = inputData.split(' ').map(item => item.trim());
 
-            message.channel.send(`${message.author} Successfully updated track name.`)
-        });
+    if(!inputData) {
+      message.channel.send(`${message.author} Provide an ID to edit`);
+      return;
     }
 
-    if (command == "!editcategory") {
-        const userId = message.author.id;
-	    const inputData = args.join(' ');
-        const [ID, category] = inputData.split(' ').map(item => item.trim());
+    db.run('UPDATE racing_data SET category = ? WHERE id = ? and user_id = ?', [category, ID, userId], (err) => {
+      if(err) {
+        console.error('Error editing data data:', err)
+        return;
+      }
 
-        if(!inputData) {
-            message.channel.send(`${message.author} Provide an ID to edit`);
-            return;
-        }
-
-        db.run('UPDATE racing_data SET category = ? WHERE id = ? and user_id = ?', [category, ID, userId], (err) => {
-            if(err) {
-                console.error('Error editing data data:', err)
-                return;
-            }
-
-            message.channel.send(`${message.author} Successfully updated category.`)
-        });
-    }
+      message.channel.send(`${message.author} Successfully updated category.`)
+    });
+  }
   
 
-    if (command === '!delete') {
-        if(!args[0]) {
-            message.channel.send(`${message.author} Provide an Lap ID to delete!`);
-            return;
-        }
-
-        const id = parseInt(args[0])
-        const userId = message.author.id;
-
-        db.get('SELECT user_id FROM racing_data WHERE id = ?', [id], (err, row) => {
-            if(err) {
-                console.error('Error fetching data');
-                return;
-            }
-            if(!row) {
-                message.channel.send(`${message.author} Entry with ID ${id} not found!`);
-            }else if(row.user_id !== userId) {
-                message.channel.send(`${message.author} This time is not yours try again!`);
-            }else {
-                db.run('DELETE FROM racing_data WHERE id = ?', [id], (err) => {
-                    if(err) {
-                        console.error("Error Deleting Data");
-                        return;
-                    }
-                    
-                    
-            message.channel.send(`${message.author} Lap at ID ${id} deleted successfully!`);
-                    
-                });
-            }
-        })
+  if (command === '!delete') {
+    if(!args[0]) {
+      message.channel.send(`${message.author} Provide an Lap ID to delete!`);
+      return;
     }
+
+    const id = parseInt(args[0])
+    const userId = message.author.id;
+
+    db.get('SELECT user_id FROM racing_data WHERE id = ?', [id], (err, row) => {
+      if(err) {
+        console.error('Error fetching data');
+        return;
+      }
+      if(!row) {
+        message.channel.send(`${message.author} Entry with ID ${id} not found!`);
+      }else if(row.user_id !== userId) {
+        message.channel.send(`${message.author} This time is not yours try again!`);
+      }else {
+        db.run('DELETE FROM racing_data WHERE id = ?', [id], (err) => {
+          if(err) {
+            console.error("Error Deleting Data");
+            return;
+          }
+                    
+                    
+          message.channel.send(`${message.author} Lap at ID ${id} deleted successfully!`);
+                    
+        });
+      }
+    })
+  }
     
     
 });
 
 db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, \"category\" text DEFAULT 'Default')")
+  db.run("CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, \"category\" text DEFAULT 'Default')")
 });
 client.login(token);
 
 function createButtons(currentPage, pageCount) {
-	const row = new ActionRowBuilder()
-		.addComponents(
-			new ButtonBuilder()
-				.setCustomId('prev')
-				.setLabel('Previous')
-				.setStyle('Primary')
-				.setDisabled(currentPage === 0),
-			new ButtonBuilder()
-				.setCustomId('next')
-				.setLabel('Next')
-				.setStyle('Primary')
-				.setDisabled(currentPage === pageCount - 1)
-		);
-	return row;
+  const row = new ActionRowBuilder()
+    .addComponents(
+      new ButtonBuilder()
+      .setCustomId('prev')
+      .setLabel('Previous')
+      .setStyle('Primary')
+      .setDisabled(currentPage === 0),
+      new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('Next')
+      .setStyle('Primary')
+      .setDisabled(currentPage === pageCount - 1)
+    );
+  return row;
 }
