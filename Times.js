@@ -181,7 +181,7 @@ client.on('messageCreate', async function(message){
   if (command == "!editcar") {
     const userId = message.author.id;
     const inputData = args.join(' ');
-    const [ID, car] = inputData.split(' ').map(item => item.trim());
+    const [ID, car] = inputData.split('|').map(item => item.trim());
 
     if(!inputData) {
       message.channel.send(`${message.author} Provide an ID to edit`);
@@ -201,7 +201,7 @@ client.on('messageCreate', async function(message){
   if (command == "!edittrack") {
     const userId = message.author.id;
     const inputData = args.join(' ');
-    const [ID, track] = inputData.split(' ').map(item => item.trim());
+    const [ID, track] = inputData.split('|').map(item => item.trim());
 
     if(!inputData) {
       message.channel.send(`${message.author} Provide an ID to edit`);
@@ -221,7 +221,7 @@ client.on('messageCreate', async function(message){
   if (command == "!editcategory") {
     const userId = message.author.id;
     const inputData = args.join(' ');
-    const [ID, category] = inputData.split(' ').map(item => item.trim());
+    const [ID, category] = inputData.split('|').map(item => item.trim());
 
     if(!inputData) {
       message.channel.send(`${message.author} Provide an ID to edit`);
