@@ -7,6 +7,7 @@ const { Pagination } =  require('pagination.js');
 
 
 client.on('ready', () => {
+    // Executes when the Discord client is ready.
     console.log(`Logged in as ${client.user.tag}`);
     const logChannel = client.channels.cache.get('1210926663978983484');
     logChannel.send("Gentlemen Start Your Engines!");
@@ -14,6 +15,7 @@ client.on('ready', () => {
 
 client.on('messageCreate', async function(message){
     
+    // Handles Discord bot commands for storing, displaying and editing racing lap times.
     if (message.author.bot) return;
     
     const args = message.content.trim().split(/ +/);
@@ -31,6 +33,7 @@ client.on('messageCreate', async function(message){
         const userId = message.author.id;
         
         db.run('INSERT INTO racing_data (user_id, track, car, lap_time, category) VALUES (?, ?, ?, ?, ?)', [userId, car, track, lapTime, category || "Default"], (err) => {
+            // Executes an SQL query to insert data into a database table.
             if(err) {
                 console.error('Error storing data:', err)
                 return;
@@ -44,6 +47,7 @@ client.on('messageCreate', async function(message){
             
         const userId = message.author.id;
         db.all('SELECT * FROM racing_data WHERE user_id = ? ORDER BY track, lap_time', [userId], async (err, rows) => {
+            // Executes a SQL query to retrieve data from a database.
             if (err) {
                 console.error('Error retrieving data', err);
                 return;
@@ -54,6 +58,7 @@ client.on('messageCreate', async function(message){
 	    let currentPage = 0;
 
 	    const embeds = rows.map(row => {
+        // Builds an embed for each row in the data.
         return new EmbedBuilder()
 		    	.addFields({ name: `Lap Times for:`, value: `${message.author}` },
 			          { name: `Id:`, value: `${row.id}` },
@@ -68,6 +73,18 @@ client.on('messageCreate', async function(message){
 	    
 	    const collector = messageInstance.createMessageComponentCollector({ componentType: ComponentType.Button });
 	    collector.on('collect', async interaction => {    
+        // Handles button clicks in a pagination system.
+        // 
+        // When a button click event is triggered, the function checks the button's custom
+        // ID to determine whether it's a 'prev' or 'next' button.
+        // 
+        // Based on the button ID, it adjusts the current page number accordingly. If the
+        // button is 'prev', it decrements the current page number if it's greater than 0.
+        // If the button is 'next', it increments the current page number if it's less than
+        // the total page count minus 1.
+        // 
+        // After adjusting the current page number, the function updates the interaction with
+        // a new embed and a new set of buttons corresponding to the new page.
         if(interaction.customId === 'prev' && currentPage > 0) {
           currentPage = currentPage - 1;
 
@@ -77,6 +94,7 @@ client.on('messageCreate', async function(message){
         await interaction.update({ embeds: [embeds[currentPage]], components: [createButtons(currentPage, pageCount)] });    
       });
           collector.on('end', () => {
+            // Triggers when a collector ends, editing a message.
             messageInstance.edit({ components: [] });
           });	
 		    
@@ -93,6 +111,7 @@ client.on('messageCreate', async function(message){
     }
         
     db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE car LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      // Executes a SQL query to retrieve racing data from a database.
       if(err) {
         console.error('Error fetching data');
         return;
@@ -118,6 +137,7 @@ client.on('messageCreate', async function(message){
     }
         
     db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE category LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      // Fetches database data based on user input and category.
       if(err) {
         console.error('Error fetching data');
         return;
@@ -143,6 +163,7 @@ client.on('messageCreate', async function(message){
     }
         
     db.all('SELECT id, car, track, lap_time, category FROM racing_data WHERE track LIKE ? AND user_id = ?', [`%${inputData}%`, userId], (err, rows) => {
+      // Executes a SQL query to retrieve racing data from a database.
       if(err) {
         console.error('Error fetching data');
         return;
@@ -169,6 +190,7 @@ client.on('messageCreate', async function(message){
     }
 
     db.run('UPDATE racing_data SET lap_time = ? WHERE id = ? and user_id = ?', [time, ID, userId], (err) => {
+      // Executes an SQL UPDATE query.
       if(err) {
         console.error('Error editing data data:', err)
         return;
@@ -189,6 +211,7 @@ client.on('messageCreate', async function(message){
     }
 
     db.run('UPDATE racing_data SET car = ? WHERE id = ? and user_id = ?', [car, ID, userId], (err) => {
+      // Executes an SQL UPDATE query on a database.
       if(err) {
         console.error('Error editing data data:', err)
         return;
@@ -209,6 +232,7 @@ client.on('messageCreate', async function(message){
     }
 
     db.run('UPDATE racing_data SET track = ? WHERE id = ? and user_id = ?', [track, ID, userId], (err) => {
+      // Executes a SQL UPDATE query, updating the 'track' field in the 'racing_data' table.
       if(err) {
         console.error('Error editing data data:', err)
         return;
@@ -229,6 +253,7 @@ client.on('messageCreate', async function(message){
     }
 
     db.run('UPDATE racing_data SET category = ? WHERE id = ? and user_id = ?', [category, ID, userId], (err) => {
+      // Executes an SQL query to update a database.
       if(err) {
         console.error('Error editing data data:', err)
         return;
@@ -249,6 +274,7 @@ client.on('messageCreate', async function(message){
     const userId = message.author.id;
 
     db.get('SELECT user_id FROM racing_data WHERE id = ?', [id], (err, row) => {
+      // Fetches data from a database and deletes it if it matches certain conditions.
       if(err) {
         console.error('Error fetching data');
         return;
@@ -259,6 +285,7 @@ client.on('messageCreate', async function(message){
         message.channel.send(`${message.author} This time is not yours try again!`);
       }else {
         db.run('DELETE FROM racing_data WHERE id = ?', [id], (err) => {
+          // Executes a database query to delete data.
           if(err) {
             console.error("Error Deleting Data");
             return;
@@ -276,10 +303,24 @@ client.on('messageCreate', async function(message){
 });
 
 db.serialize(() => {
+  // Executes a SQL query to create a table in a database.
   db.run("CREATE TABLE IF NOT EXISTS racing_data (id INTEGER PRIMARY KEY, user_id TEXT, track TEXT, car TEXT, lap_time TEXT, \"category\" text DEFAULT 'Default')")
 });
 client.login(token);
 
+/**
+ * @description Generates a Discord action row with two buttons, 'Previous' and 'Next',
+ * for navigating through pages. The buttons are disabled when the current page is
+ * the first or last page, respectively.
+ *
+ * @param {number} currentPage - Indicating the current page number being displayed.
+ *
+ * @param {number} pageCount - Used to determine the maximum page number for pagination
+ * buttons.
+ *
+ * @returns {ActionRowBuilder[]} An ActionRowBuilder object containing two ButtonBuilder
+ * objects, representing the "Previous" and "Next" buttons.
+ */
 function createButtons(currentPage, pageCount) {
   const row = new ActionRowBuilder()
     .addComponents(
